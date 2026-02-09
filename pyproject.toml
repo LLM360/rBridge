@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "rbridge"
+version = "0.1.0"
+description = "Reasoning trace likelihood evaluation with masked spans"
+requires-python = ">=3.9"
+dependencies = [
+    "vllm",
+    "transformers",
+    "datasets",
+    "torch",
+]
+
+[project.scripts]
+rbridge = "rbridge.eval:main"
