@@ -40,18 +40,19 @@ rBridge supports two evaluation modes for scoring reasoning traces:
 ```bash
 git clone https://github.com/trillionlabs/rbridge.git
 cd rbridge
-conda create -n rbridge python=3.10 -y
-conda activate rbridge
-pip install -r requirements.txt
-pip install -e .
+pixi install
+pixi run check
 ```
 
 ## Usage
 
+There is a pixi task `rbridge = "python -m rbridge.eval"`, so `pixi run rbridge 
+...` is equivalent to `pixi run python -m rbridge.eval ...`
+
 ### Quick Start
 
 ```bash
-python -m rbridge.eval \
+pixi run rbridge \
     --model trillionlabs/Tri-0.5B-Base \
     --dataset trillionlabs/rbridge-mask \
     --subsets aime25 \
@@ -63,7 +64,7 @@ python -m rbridge.eval \
 ### Full Evaluation
 
 ```bash
-python -m rbridge.eval \
+pixi run rbridge \
     --model trillionlabs/Tri-0.5B-Base \
     --dataset trillionlabs/rbridge-mask \
     --subsets mmlu-pro,math500,gpqa,cqa,bbh,arena-hard,arc,aime25,mmlu,kmmlu \

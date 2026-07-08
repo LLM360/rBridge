@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=68.0"]
-build-backend = "setuptools.backends._legacy:_Backend"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "rbridge"
@@ -10,9 +10,30 @@ requires-python = ">=3.9"
 dependencies = [
     "vllm",
     "transformers",
-    "datasets",
+    "datasets>=2.19",
     "torch",
+    "safetensors>=0.8",
 ]
 
 [project.scripts]
 rbridge = "rbridge.eval:main"
+
+[tool.setuptools.packages.find]
+include = ["rbridge*"]
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[tool.pixi.activation.env]
+PYTHONNOUSERSITE = "1"
+
+[tool.pixi.pypi-dependencies]
+rbridge = { path = ".", editable = true }
+
+[tool.pixi.tasks]
+rbridge = "python -m rbridge.eval"
+check = "python -m compileall rbridge"
+
+[tool.pixi.dependencies]
+python = "3.10.*"
