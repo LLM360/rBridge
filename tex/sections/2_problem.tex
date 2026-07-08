@@ -1,0 +1,37 @@
+% \section{Preliminary: Problem Formulation and Notations} \label{sec:prelim} 
+% --- juyoung's ---
+
+% We consider the setting where the evaluation target is fixed: a large-scale model (the \textit{target}) is assessed on reasoning benchmarks using standard metrics such as Accuracy (Acc.) or Pass@k (p@k). Our goal is to leverage much smaller \textit{proxy} models—defined by $|\theta^\text{p}| < |\theta^\text{t}|$—to estimate how the target model would perform, without incurring the prohibitive costs of training and evaluating at full scale.  
+
+% The challenge lies in designing a proxy \textit{evaluation scheme}. Directly applying the target metric to small proxies is unreliable: their scores are noisy and often fail to correlate with large-scale behavior, especially on reasoning benchmarks. Instead, we seek proxy metrics that provide stable and informative signals, enabling what we call \textit{evaluation scale transfer}.  
+
+% Why is such transfer important? We highlight two key scenarios:  
+% \begin{itemize}
+%     \item \textbf{Intra-recipe transfer.} Practitioners often face the decision of whether to continue scaling a given training recipe. For example, doubling the training budget from 500B to 1000B tokens may incur enormous additional cost, but the expected gain in Accuracy or Pass@k is uncertain. A reliable proxy evaluation scheme would allow practitioners to anticipate these gains early with small models, helping decide whether further scaling is worthwhile.  
+%     \item \textbf{Inter-recipe transfer.} Another common challenge is selecting among multiple candidate training data sources. Training large models on each option is prohibitively expensive, yet choosing the wrong dataset can waste vast resources. Here, proxies can act as lightweight evaluators, ranking datasets or mixtures before committing to full-scale runs.  
+% \end{itemize}  
+
+% --- juyoung's ---
+% We consider the setting where the evaluation \textbf{t}arget is fixed: a large-scale pre-trained model $\pi^\text{\textbf{t}}$ assessed on reasoning benchmarks using Acc. or Pass@k (p@k). Our goal is to leverage much smaller \textbf{p}roxy model $\pi^\text{\textbf{p}}$ to estimate how the target model would perform at a significantly reduced compute cost. Concretely, we aim to search for a proxy metric, $\text{metric}^\text{p}$, which achieves the strongest relationship $f: \text{metric}^\text{p}( \pi^\text{p}) \mapsto \text{Acc./p@k}( \pi^\text{t})$. If we are interested in performance prediction, we can use Pearson Correlation R$^2$ \citep{benesty2009pearson} and Mean Absolute Error (MAE; \cite{chai2014root}). Alternatively, for ranking relationships we can use Decision Accuracy (DAcc.; \cite{magnusson2025datadecide}) and Kendall Tau \citep{sen1968estimates}. For succinctness in explaining experiment scale $n$ $\rightarrow$ $m$ denotes proxy model size $n$ to target model size $m$, e.g., 1B $\rightarrow$ 32B. For next token prediction we denote $p(y_\tau \vert x, y^*_{<\tau})$, where $y$ is the decoded token, $x$ is the prompt, and $\tau$ denotes token step.
+
+% Intuitively, when we observe a change ($\Delta$) in proxy $\text{metric}^\text{p}$, we should be able to expect $\Delta\text{metric}^\text{t}$, if we derive a strong relationship, e.g., via Pearson Correlation \citep{benesty2009pearson} and Kendall Tau \citep{sen1968estimates}. As the target $\text{metric}^\text{t}$ is given as Accuracy (Acc.) or Pass@k (p@k), we aim to find a metric$^\text{p}$ that best proxies $\text{metric}^\text{t}$. We consider two cases that cause $\Delta\text{metric}^\text{t}$. \textbf{[1] Intra-recipe} $\Delta$: $\Delta$ caused by difference in training data size, e.g., training token size of 500B to 1000B commonly causes $\text{metric}^\text{t}$ to improve. Here, we assume that the pre-training data set source is equivalent across scale. The intra-recipe setting is used to predict performance at larger scale. \textbf{[2] Inter-recipe} $\Delta$: $\Delta$ caused by using a different training data source. The inter-recipe setting is used for pre-training dataset search (ranking). 
+
+
+% as we acknowledge the challenge of exposure bias \citep{NIPS2015_e995f98d,ranzato2015sequence}, where next token prediction (1-token roll out) has a lower error bound over free-form generation ($n$-token roll out) as the gold context ($y^*_{<t}$) is provided. As discussed in the exposure bias literature, $n$-token roll outs used for Accuracy and Pass@k result in accumulated error.
+
+
+% \input{sections/new_method}
+
+\section{Problem Setting} \label{sec:problem}
+Let $\pi^\text{p}, \pi^\text{t}$ denote small proxy and large target model, respectively. The target metric $\text{metric}^\text{t}$ (e.g., Acc., Pass@k) is fixed. Our objective is to design a proxy evaluation $\text{metric}^\text{p}$ such that considering $f: \text{metric}^\text{p} \mapsto \text{metric}^\text{t}$, find $\text{metric}^\text{p} := \max_{\text{metric}} \text{corr}(\text{metric}(\pi^\text{p}), \text{metric}^\text{t}(\pi^\text{t}))$. We discuss the corr($\cdot$) function we use in future sections. That is, improvements observed at proxy scale should reliably predict improvements at target scale. We denote scaling experiments as $n \rightarrow m$, where $n, m$ is the proxy, target model size, respectively; e.g., $1\text{B} \rightarrow 32\text{B}$. Performance changes can arise from either \textbf{(I)} varying the training dataset at fixed data size, or \textbf{(II)} varying the training data size given a fixed dataset. This enables two key applications: \textbf{(I)} comparing alternative training datasets without training large models on each, and \textbf{(II)} predicting whether scaling up training data (e.g., 3000B → 3500B tokens) is worthwhile. This is important because it enables us to predict the return on investment for large-scale training before committing resources. A practical proxy evaluation scheme must therefore be reliable at \textit{small scale} and achieve \textit{high correlation}.
+
+% In turn, from a practical perspective, we aim to maximize $\text{relationship}(\text{metric}^\text{p}(\pi^\text{p}), \text{metric}^\text{t}(\pi^\text{t}))$ under two key scenarios: \textbf{(1)} Comparing alternative training datasets without training a large model on each option, \textbf{(2)} Predicting whether scaling up a given training dataset (e.g., 500B $\rightarrow$ 1000B tokens) is worthwhile. A practical proxy evaluation scheme must therefore be \textit{reliable at small scale} and \textit{transferable across training datasets}.
+
+% In other words, we are attempting to solve the following optimization problem: $\max_{\text{metric}^\text{p}} \text{corr}(\text{metric}^\text{p}(\pi^\text{p}), \text{metric}^\text{t}(\pi^\text{t}))$. 
+
+% Note that our definition of $\text{metric}^\text{p}$ also includes possible transformations of the underlying evaluation data of $\text{metric}^\text{t}$. 
+
+
+
+% Training large reasoning models is prohibitively expensive. As a result, practitioners often rely on \textit{proxy models}—smaller, pre-train-only models—to anticipate the effectiveness of different pre-training recipes before committing resources to large-scale runs.  
+% Formally, 

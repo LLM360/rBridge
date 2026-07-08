@@ -1,0 +1,10 @@
+\begin{abstract}
+Given the prohibitive cost of pre-training large language models, it is essential to leverage smaller proxy models to optimize datasets before scaling up. However, this approach becomes challenging for reasoning capabilities, which exhibit \textit{emergent} behavior that only appear reliably at larger model sizes, often exceeding 7B parameters. To address this, we introduce \tsc{rBridge}, showing that small proxies ($\leq$1B) can effectively predict large-model reasoning by aligning more closely with \textbf{(1)} the pre-training objective and \textbf{(2)} the target task. \tsc{rBridge} achieves this by weighting negative log-likelihood with task alignment, using reasoning traces from frontier models as gold labels. In our experiments, \tsc{rBridge} \textbf{(i)} reduces dataset ranking costs by over 100$\times$ relative to the best baseline, \textbf{(ii)} achieves the strongest correlation across six reasoning benchmarks at 1B to 32B scale, and \textbf{(iii)} zero-shot transfers predictive relationships across pre-training datasets at 1B to 7B scale. These findings indicate that \tsc{rBridge} offers a practical path for exploring reasoning-oriented pre-training at lower cost.
+% \vspace{-2em}
+\begin{center}
+
+\href{https://huggingface.co/datasets/trillionlabs/rbridge}{\twemoji{1f917} \textbf{\tsc{rBridge}}}
+
+\end{center}
+
+\end{abstract}

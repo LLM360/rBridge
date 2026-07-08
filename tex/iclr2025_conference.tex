@@ -1,0 +1,129 @@
+
+\documentclass{article} % For LaTeX2e
+\usepackage{iclr2026_conference,times}
+
+% Optional math commands from https://github.com/goodfeli/dlbook_notation.
+% \input{math_commands.tex}
+
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{graphicx}  % for \resizebox
+
+\usepackage{caption}
+\usepackage{amsmath,amsfonts,bm}
+% Required packages for the theorem
+\usepackage{amsthm}      % For theorem, proof, and remark environments
+\usepackage{amssymb}     % For 
+
+% Optional but recommended
+\usepackage{mathtools}   % Extends amsmath with 
+\usepackage{algorithm}
+\usepackage[algo2e, linesnumbered, ruled, vlined]{algorithm2e}
+\usepackage{algpseudocode}
+
+\usepackage{wrapfig}             
+\usepackage{lipsum} 
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section] 
+\newtheorem{remark}{Remark}[section]
+\newtheorem{proposition}{Proposition}[section]
+
+\newcommand{\mc}[1]{\mathcal{#1}}  % Shortcut for \mathcal
+\newcommand{\mbf}[1]{\mathbf{#1}}  % Shortcut for \mathbf
+\newcommand{\mbb}[1]{\mathbb{#1}}  % Shortcut for \mathbb
+\newcommand{\tsc}[1]{\textsc{#1}}  
+\newcommand{\ttt}[1]{\texttt{#1}}  
+
+\usepackage{hyperref}       % hyperlinks
+\hypersetup{
+    colorlinks = true,
+    citecolor = [HTML]{0668E1},  
+    linkcolor  = [HTML]{8B0000},  % DarkRed
+    filecolor  = [HTML]{00008B},  % DarkBlue
+    urlcolor   = [HTML]{00008B}   % DarkBlue
+}
+
+\usepackage{twemojis} 
+\usepackage{fontawesome5}
+
+\usepackage{url}
+\usepackage{tcolorbox}
+
+\usepackage{multirow}
+\usepackage[table]{xcolor}
+\definecolor{mybrown}{HTML}{EA580C}
+\definecolor{mygreen}{HTML}{008744}
+\definecolor{myorange}{HTML}{ffa700}
+\definecolor{myred}{HTML}{d62d20}
+\usepackage{subcaption}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\usepackage{makecell}
+\usepackage{xcolor} 
+\usepackage{subcaption} % in preamble
+
+\usepackage{natbib}
+
+\input{macros.tex}
+
+
+\title{Predicting LLM Reasoning Performance with Small Proxy Model}
+
+% Authors must not appear in the submitted version. They should be hidden
+% as long as the \iclrfinalcopy macro remains commented out below.
+% Non-anonymous submissions will be rejected without review.
+
+\author{
+  Woosung Koh\textsuperscript{$\triangledown$\scalebox{0.85}{$\spadesuit$}}, 
+  Juyoung Suk\textsuperscript{$\triangledown\scalebox{0.85}{$\spadesuit$}$}, 
+  Sungjun Han\textsuperscript{$\triangledown\star$}, 
+  Se-Young Yun\textsuperscript{\scalebox{0.85}{$\spadesuit$}$\star$},
+  Jamin Shin\textsuperscript{$\triangledown \star$}\\
+  \textsuperscript{$\triangledown$}Trillion Labs, \textsuperscript{\scalebox{0.85}{$\spadesuit$}}KAIST AI\\
+  \footnotesize{\textsuperscript{$\star$}Correspondence to: yunseyoung@kaist.ac.kr, \{sungjun.han, jay\}@trillionlabs.co}
+}
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to \LaTeX{} to determine where to break
+% the lines. Using \AND forces a linebreak at that point. So, if \LaTeX{}
+% puts 3 of 4 authors names on the first line, and the last on the second
+% line, try using \AND instead of \And before the third author name.
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+
+% \preprintcopy
+\iclrfinalcopy % Uncomment for camera-ready version, but NOT for submission.
+\begin{document}
+
+
+\maketitle
+
+\input{sections/0_abstract} 
+\input{sections/1_intro}
+\input{sections/2_problem}
+\input{sections/3_method}
+\input{sections/4_results}
+\input{sections/5_discussion}
+
+\newpage
+\section{Ethics Statement} \label{app:ethic}
+Our work conforms to the ICLR Code of Ethics. We report minor use of LLMs for polishing writing. All LLM-generated content has been reviewed and verified by the authors, who take full responsibility for the accuracy and integrity of the work presented.
+
+\section{Reproducibility Statement} \label{app:reproduce}
+Our method \tsc{rBridge} is fully reproducible using the information provided in this paper. The approach follows a straightforward process: applying a specific prompt to a frontier model, then computing our proposed negative log-likelihood as presented in Eq. (\ref{eq:rbridge_nll}) and illustrated in Fig. \ref{fig:rbridge}. We provide the exact prompt in  Appendix \ref{app:pseudocode} along with pseudocode (Alg. \ref{alg:rbridge}) for implementation. To further support reproducibility and benefit the research community, we open-sourced our dataset.
+
+\section{Acknowledgment} 
+This research was fully funded by Trillion Labs. Se-Young Yun was partially supported by the Institute of Information \& communications Technology Planning \& Evaluation (IITP) grant funded by the Korea government (MSIT) (No. 2022-0-00871, Development of AI Autonomy and Knowledge Enhancement for AI Agent Collaboration).
+
+\bibliography{iclr2025_conference}
+\bibliographystyle{iclr2025_conference}
+
+\newpage
+\appendix
+\input{sections/7_appendix}
+
+\end{document}
